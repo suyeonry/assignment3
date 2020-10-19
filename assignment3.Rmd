@@ -147,3 +147,92 @@ knitr::kable(database)
 
 ```
 
+
+
+
+
+# Text Mining 
+
+## 1. Tokenize abstract and count 
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(tidytext)
+library(dplyr)
+library(readr)
+
+
+```
+
+```{r}
+
+pubmed <- readr::read_csv("C:/Users/suyeo/PM566/assignment3/pubmed.csv")
+
+covid <- pubmed %>%
+  select(abstract, term)
+
+```
+
+```{r}
+covid %>%
+  unnest_tokens(token, term) %>%
+  count(token, sort = TRUE)
+
+covid %>%
+  unnest_tokens(token, abstract) %>%
+  count(token, sort = TRUE)
+```
+
+There are a lot of stop words included, and I can see covid and 19 are separated and considered as two tokens in abstracts. 
+
+```{r}
+covid %>%
+  unnest_tokens(token, term) %>%
+  anti_join(stop_words, by = c("token" = "word")) %>%
+  count(token, sort = TRUE)
+
+covid %>%
+  unnest_tokens(token, abstract) %>%
+  anti_join(stop_words, by = c("token" = "word")) %>%
+  count(token, sort = TRUE)
+```
+
+After removal, the stop words are gone and more relevant words tokens are left. 
+The most common tokens after removing stop-words are : covid, 19, patients, cancer, prostate.
+
+## 2. Tokenize abstracts into bigrams. 
+
+```{r}
+
+covid %>%
+  unnest_ngrams(ngram, abstract, n=2) %>%
+  count(ngram, sort = TRUE) %>%
+  top_n(10, n)%>%
+  ggplot(aes(n, fct_reorder(ngram, n))) +
+  geom_col()
+
+```
+
+
+Based on the tokenized abstracts bigram above, the 10 most frequent bigrams are shown. The most frequent bigram is covid 19, which is somewhat expected. 
+
+
+## 3. Calculate TF-IDF value
+
+```{r}
+
+
+covid %>%
+  unnest_tokens(document, abstract) %>%
+  anti_join(stop_words, by = c("document" = "word")) %>%
+  count(document, sort = TRUE)%>%
+  bind_tf_idf(document,document, n)%>%
+  arrange(desc(tf_idf))
+
+
+
+
+
+```
+
