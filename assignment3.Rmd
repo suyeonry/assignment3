@@ -196,6 +196,11 @@ covid %>%
   unnest_tokens(token, abstract) %>%
   anti_join(stop_words, by = c("token" = "word")) %>%
   count(token, sort = TRUE)
+
+covid %>%
+  unnest_tokens(token, abstract) %>%
+  anti_join(stop_words, by = c("token" = "word")) %>%
+  count(token, sort = TRUE)
 ```
 
 After removal, the stop words are gone and more relevant words tokens are left. 
@@ -231,8 +236,5 @@ covid %>%
   arrange(desc(tf_idf))
 
 
-
-
-
 ```
-
+e

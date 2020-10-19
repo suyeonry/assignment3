@@ -2648,6 +2648,24 @@ library(readr)</code></pre>
 ##  9 preeclampsia  1863
 ## 10 treatment     1841
 ## # ... with 19,968 more rows</code></pre>
+<pre class="r"><code>covid %&gt;%
+  unnest_tokens(token, abstract) %&gt;%
+  anti_join(stop_words, by = c(&quot;token&quot; = &quot;word&quot;)) %&gt;%
+  count(token, sort = TRUE)</code></pre>
+<pre><code>## # A tibble: 19,978 x 2
+##    token            n
+##    &lt;chr&gt;        &lt;int&gt;
+##  1 covid         7275
+##  2 19            7080
+##  3 patients      4674
+##  4 cancer        3999
+##  5 prostate      3832
+##  6 disease       2574
+##  7 pre           2165
+##  8 eclampsia     2005
+##  9 preeclampsia  1863
+## 10 treatment     1841
+## # ... with 19,968 more rows</code></pre>
 <p>After removal, the stop words are gone and more relevant words tokens are left. The most common tokens after removing stop-words are : covid, 19, patients, cancer, prostate.</p>
 </div>
 <div id="tokenize-abstracts-into-bigrams." class="section level2">
@@ -2683,6 +2701,7 @@ library(readr)</code></pre>
 ##  9 preeclampsia  1863     1  9.90   9.90
 ## 10 treatment     1841     1  9.90   9.90
 ## # ... with 19,968 more rows</code></pre>
+<p>e</p>
 </div>
 </div>
 
